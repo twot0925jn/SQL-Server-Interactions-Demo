@@ -24,7 +24,8 @@ namespace SQLServerInteractionsDemo_ClassLibrary
                 .HasDiscriminator<string>("Field2")
                 .HasValue<CustomSubClass1>("Cat1")
                 .HasValue<CustomSubClass2>("Cat2")
-                .HasValue<CustomSubClass3>("Cat3");
+                .HasValue<CustomSubClass3>("Cat3")
+                .HasValue<CustomSubClass4>("Cat4");
         }
 
         // The Connection string is used to specify connection details such as server, database, and credentials
