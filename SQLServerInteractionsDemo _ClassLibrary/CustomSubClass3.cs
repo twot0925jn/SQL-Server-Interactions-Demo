@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SQLServerInteractionsDemo__ClassLibrary
+namespace SQLServerInteractionsDemo_ClassLibrary
 {
     public class CustomSubClass3: CustomClass
     {
+        public CustomSubClass3()
+        {
+
+        }
     }
 }

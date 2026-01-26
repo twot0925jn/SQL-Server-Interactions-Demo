@@ -1,5 +1,5 @@
 <Solution>
   <Project Path="SQL Server Interactions Demo/SQLServerInteractionsDemo.csproj" />
-  <Project Path="SQLServerInteractionsDemo _ClassLibrary/SQLServerInteractionsDemo _ClassLibrary.csproj" />
-  <Project Path="SQLServerInteractionsDemo _TestLibrary/SQLServerInteractionsDemo _TestLibrary.csproj" />
+  <Project Path="SQLServerInteractionsDemo _ClassLibrary/SQLServerInteractionsDemo_ClassLibrary.csproj" />
+  <Project Path="SQLServerInteractionsDemo _TestLibrary/SQLServerInteractionsDemo_TestLibrary.csproj" />
 </Solution>

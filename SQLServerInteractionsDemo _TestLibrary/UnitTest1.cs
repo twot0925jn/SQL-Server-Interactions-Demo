@@ -1,4 +1,4 @@
-﻿namespace SQLServerInteractionsDemo__TestLibrary
+﻿namespace SQLServerInteractionsDemo_TestLibrary
 {
     public class UnitTest1
     {

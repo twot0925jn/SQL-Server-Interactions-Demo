@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SQLServerInteractionsDemo _ClassLibrary\SQLServerInteractionsDemo _ClassLibrary.csproj" />
+    <ProjectReference Include="..\SQLServerInteractionsDemo _ClassLibrary\SQLServerInteractionsDemo_ClassLibrary.csproj" />
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SQL Server Interactions Demo\SQLServerInteractionsDemo.csproj" />
-    <ProjectReference Include="..\SQLServerInteractionsDemo _ClassLibrary\SQLServerInteractionsDemo _ClassLibrary.csproj" />
+    <ProjectReference Include="..\SQLServerInteractionsDemo _ClassLibrary\SQLServerInteractionsDemo_ClassLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
