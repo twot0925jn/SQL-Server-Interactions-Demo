@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Microsoft.Identity.Client;
-using Microsoft.IdentityModel.Tokens;
 using SQLServerInteractionsDemo_ClassLibrary;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace SQL_Server_Interactions_Demo
 {
@@ -58,11 +53,6 @@ namespace SQL_Server_Interactions_Demo
             {
                 Console.WriteLine($"Please select from the following: {string.Join(", ", acceptableCategories)}\n");
                 input = Console.ReadLine().Trim().ToUpper() ?? string.Empty;
-
-                //if (string.IsNullOrEmpty(input))
-                //{
-                //    input = "";
-                //}
 
                 if (!acceptableCategories.Contains(input))
                 {
