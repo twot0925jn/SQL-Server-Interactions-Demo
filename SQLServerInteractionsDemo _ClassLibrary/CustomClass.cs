@@ -9,7 +9,7 @@ namespace SQLServerInteractionsDemo_ClassLibrary
 {
     public abstract class CustomClass
     {
-        public static int id { get; set; } = 0; //Static property shared across all instances
+        public static int id { get; set; } = 0;
         public static readonly HashSet<string> AllowedCategories = new HashSet<string> { "Cat1", "Cat2", "Cat3", "Cat4" };
 
         //Private instance fields start with an underscore
