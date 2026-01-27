@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using SQLServerInteractionsDemo_ClassLibrary;
 using System.Collections.Generic;
+using System.Globalization;
 
 
 namespace SQL_Server_Interactions_Demo
@@ -44,7 +45,7 @@ namespace SQL_Server_Interactions_Demo
         public static void GenerateNewRow(List<CustomClass> data)
         {
             string input = "";
-            HashSet<string> acceptableCategories = new HashSet<string> { "CAT1", "CAT2", "CAT3", "CAT4" };
+            HashSet<string> acceptableCategories = new HashSet<string> { "Cat1", "Cat2", "Cat3", "Cat4" };
 
             Console.Clear();
 
@@ -52,8 +53,8 @@ namespace SQL_Server_Interactions_Demo
             while (!acceptableCategories.Contains(input))
             {
                 Console.WriteLine($"Please select from the following: {string.Join(", ", acceptableCategories)}\n");
-                input = Console.ReadLine().Trim().ToUpper() ?? string.Empty;
-
+                input = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Console.ReadLine().Trim() ?? string.Empty); //Convert input to title case
+                
                 if (!acceptableCategories.Contains(input))
                 {
                     Console.Clear();
@@ -68,19 +69,19 @@ namespace SQL_Server_Interactions_Demo
 
             switch (input)
             {
-                case "CAT1":
+                case "Cat1":
                     data.Add(new CustomSubClass1());
                     Console.WriteLine("New row generated");
                     break;
-                case "CAT2":
+                case "Cat2":
                     data.Add(new CustomSubClass2());
                     Console.WriteLine("New row generated");
                     break;
-                case "CAT3":
+                case "Cat3":
                     data.Add(new CustomSubClass3());
                     Console.WriteLine("New row generated");
                     break;
-                case "CAT4":
+                case "Cat4":
                     data.Add(new CustomSubClass4());
                     Console.WriteLine("New row generated");
                     break;
@@ -100,15 +101,11 @@ namespace SQL_Server_Interactions_Demo
             while (!exitApplication)
             {
 
-                HashSet<string> allowedChoices = new HashSet<string> { "1", "2", "3" };
+                HashSet<string> allowedChoices = new HashSet<string> { "1", "2", "3", "4", "9" };
 
                 List<CustomClass> data = LoadDatabase();
 
-                Console.WriteLine("Choose an option:");
-                Console.WriteLine("1. List Database Entries");
-                Console.WriteLine("2. Generate and add new entry (default data)");
-                Console.WriteLine("3. Exit\n");
-
+                ListMenuOptions();
                 string choice = Console.ReadLine().Trim();
 
                 while (!allowedChoices.Contains(choice))
@@ -116,10 +113,7 @@ namespace SQL_Server_Interactions_Demo
                     Console.Clear();
                     Console.WriteLine($"Invalid selection, only the following are allowed: {string.Join(", ", allowedChoices)}\n");
 
-                    Console.WriteLine("Choose an option:");
-                    Console.WriteLine("1. List Database Entries");
-                    Console.WriteLine("2. Generate and add new entry");
-                    Console.WriteLine("3. Exit\n");
+                    ListMenuOptions();
 
                     choice = Console.ReadLine().Trim();
                 }
@@ -133,6 +127,10 @@ namespace SQL_Server_Interactions_Demo
                         GenerateNewRow(data);
                         break;
                     case "3":
+                        break;
+                    case "4":
+                        break;
+                    case "9":
                         Console.Clear();
                         Console.WriteLine("Exiting application...\n");
                         exitApplication = true;
@@ -143,11 +141,21 @@ namespace SQL_Server_Interactions_Demo
             }
 
         }
-            public static void ContinuePrompt()
+        public static void ContinuePrompt()
         {
             Console.WriteLine("\nPress enter to continue");
             Console.ReadLine();
             Console.Clear();
+        }
+
+        public static void ListMenuOptions()
+        {
+            Console.WriteLine("Choose an option:");
+            Console.WriteLine("1. List Database Entries");
+            Console.WriteLine("2. Generate and add new entry (default data)");
+            Console.WriteLine("3. Modify entry");
+            Console.WriteLine("4. Remove entry");
+            Console.WriteLine("9. Exit\n");
         }
 
         public static void Main(string[] args)
