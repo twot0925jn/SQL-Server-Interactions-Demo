@@ -9,10 +9,10 @@ namespace SQLServerInteractionsDemo_ClassLibrary
     //The following is a context class
     public class SQLServerConnectionContext : DbContext
     {
-        public string dataSource = "(localdb)\\MSSQLLocalDB"; //Server name or network address of the SQL Server instance
-        public string initialCatalog = "ExampleDatabase";  //Database name
-        public string userID = ""; //Username for SQL Server authentication
-        public string userPass = ""; //Password for SQL Server authentication
+        public string dataSource = "(localdb)\\MSSQLLocalDB";       //Server name or network address of the SQL Server instance
+        public string initialCatalog = "ExampleDatabase";           //Database name
+        public string userID = "";                                  //Username for SQL Server authentication
+        public string userPass = "";                                //Password for SQL Server authentication
 
         //DBSet represents a collection of entities that can be queried from the database
         //Ensure that the database name is set here to match your SQL Server database (dbo.ExampleTable in the example)
@@ -36,7 +36,7 @@ namespace SQLServerInteractionsDemo_ClassLibrary
 
 
             // Use the following where credentials are required:
-            // optionsBuilder.UseSqlServer($"Server={dataSource};Database={initialCatalog};User Id={userID};Password={userPass};Trusted_Connection=True;");
+            // optionsBuilder.UseSqlServer($"Server={dataSource};Database={initialCatalog};User Id={userID};Password={userPass};Trusted_Connection=True;Encrypt=False");
         }
     }
 }

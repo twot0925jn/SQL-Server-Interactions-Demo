@@ -24,7 +24,7 @@ namespace SQL_Server_Interactions_Demo
             var data = LoadDatabase();
             foreach (var item in data)
             {
-                System.Console.WriteLine($"ID: {item.Id}, Field1: {item.Field1}, Field2: {item.Field2}, Field3: {item.Field3}");
+                Console.WriteLine($"ID: {item.Id}, Field1: {item.Field1}, Field2: {item.Field2}, Field3: {item.Field3}");
             }
         }
     }
