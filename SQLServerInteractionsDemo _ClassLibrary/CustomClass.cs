@@ -13,9 +13,9 @@ namespace SQLServerInteractionsDemo_ClassLibrary
 
         //Private instance fields start with an underscore
         private int _id = 0;
-        private string _field1 = "Laborum";
-        private string _field2 = "Cat4";
-        private int _field3 = 99;
+        private string _field1;
+        private string _field2;
+        private int _field3;
 
         // Class constructors are used to initialise objects and set default fields
         public CustomClass(int? id = null, string field1 = "None", string field2 = "Cat4", int field3 = 99)
