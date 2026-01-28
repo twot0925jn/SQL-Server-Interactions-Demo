@@ -53,6 +53,7 @@ namespace SQL_Server_Interactions_Demo
             while (!acceptableCategories.Contains(input))
             {
                 Console.WriteLine($"Please select from the following: {string.Join(", ", acceptableCategories)}\n");
+
                 input = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Console.ReadLine().Trim() ?? string.Empty); //Convert input to title case
                 
                 if (!acceptableCategories.Contains(input))
@@ -127,8 +128,10 @@ namespace SQL_Server_Interactions_Demo
                         GenerateNewRow(data);
                         break;
                     case "3":
+                        Console.WriteLine("Option not currently in use...");
                         break;
                     case "4":
+                        Console.WriteLine("Option not currently in use...");
                         break;
                     case "9":
                         Console.Clear();
