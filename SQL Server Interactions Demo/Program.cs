@@ -42,7 +42,7 @@ namespace SQL_Server_Interactions_Demo
             {
                 using (SQLServerConnectionContext db = new SQLServerConnectionContext())
                 {
-                    CustomClass databaseMatchedCandidate = db.ExampleTable.Single(a => a.Id.ToString() == removalCandidate);
+                    CustomClass databaseMatchedCandidate = db.ExampleTable.Single(a => a.Id.ToString() == removalCandidate); //return the only entry in the database that matches the returned removalCandidate string 
                     db.ExampleTable.Remove(databaseMatchedCandidate);
                     db.SaveChanges();
                 }
