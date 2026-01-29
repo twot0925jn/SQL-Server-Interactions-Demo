@@ -9,7 +9,7 @@ namespace SQLServerInteractionsDemo_ClassLibrary
     public abstract class CustomClass
     {
         public static int id { get; set; } = 0;
-        public static readonly HashSet<string> AllowedCategories = new HashSet<string> { "Cat1", "Cat2", "Cat3", "Cat4" };
+        public static readonly HashSet<string> allowedCategories = new HashSet<string> { "Cat1", "Cat2", "Cat3", "Cat4" };
 
         //Private instance fields start with an underscore
         private int _id = 0;
@@ -36,6 +36,10 @@ namespace SQLServerInteractionsDemo_ClassLibrary
             set => _id = value;
         }
 
+        public HashSet<string> AllowedCategories
+        {
+            get => allowedCategories;
+        }
 
         public string Field1
         {

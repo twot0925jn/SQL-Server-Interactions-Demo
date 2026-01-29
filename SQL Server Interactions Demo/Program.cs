@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using SQLServerInteractionsDemo_ClassLibrary;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Globalization;
 
 
@@ -8,6 +12,40 @@ namespace SQL_Server_Interactions_Demo
 {
     internal class Program
     {
+
+        public static List<string> GetTables()
+        {
+            using (SqlConnection connection = new SqlConnection("Server=(localdb)\\MSSQLLocalDB;Database=ExampleDatabase;Trusted_Connection=True;Encrypt=False"))
+            {
+                connection.Open();
+                DataTable schema = connection.GetSchema("Tables");
+                List<string> tableNames = new List<string>();
+                foreach (DataRow row in schema.Rows)
+                {
+                    string tableName = row[2].ToString();
+                    Console.WriteLine(tableName);
+                    tableNames.Add(tableName);
+                }
+                return tableNames;
+            }
+        }
+
+
+
+        //public static List<string> GetTables()
+        //{
+        //    using (SQLServerConnectionContext db = new SQLServerConnectionContext())
+        //    {
+        //        var tableNames = db.Model.GetEntityTypes()
+        //            .Select(t => t.GetTableName())
+        //            .Distinct()
+        //            .ToList();
+        //    }
+
+        //    return tableNames;
+        //}
+
+
         public static List<CustomClass> LoadDatabase()
         {
             var databaseContents = new List<CustomClass>();
@@ -50,6 +88,30 @@ namespace SQL_Server_Interactions_Demo
                 Console.WriteLine($"\nDatabase updated, entry ID {removalCandidate} removed.");
                 ContinuePrompt();
             }       
+        }
+
+        public static void ModifyDatabaseEntry(List<CustomClass> data)
+        {
+            string modificationCandidate = EntrySelection(data, "modify");
+            if (modificationCandidate == "0")
+            {
+                return;
+            }
+            else
+            {
+                using (SQLServerConnectionContext db = new SQLServerConnectionContext())
+                {
+                    CustomClass databaseMatchedCandidate = db.ExampleTable.Single(a => a.Id.ToString() == modificationCandidate); //return the only entry in the database that matches the returned removalCandidate string 
+                    databaseMatchedCandidate.Field1 = "Dolor";
+                    //databaseMatchedCandidate.Field2 = "Cat4";
+                    databaseMatchedCandidate.Field3 = 3;
+
+                    //db.ExampleTable.Remove(databaseMatchedCandidate);
+                    db.SaveChanges();
+                }
+                Console.WriteLine($"\nDatabase updated, entry ID {modificationCandidate} modified.");
+                ContinuePrompt();
+            }
         }
 
         public static void DatabasePrintRows(List<CustomClass> data)
@@ -152,6 +214,75 @@ namespace SQL_Server_Interactions_Demo
             return selection;
         }
 
+        public static string GetAttributeInput(string field)
+        {
+            Console.WriteLine($"Please enter a value for {field}: ");
+
+            string value = Console.ReadLine().Trim();
+
+            if (ValidateAttribute(field, value))
+            {
+                return value;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public static bool ValidateAttribute(string field, string value)
+        {
+
+            HashSet<string> acceptableCategories = new HashSet<string> { "Cat1", "Cat2", "Cat3", "Cat4" };
+            switch (field)
+            {
+                case "Field1":
+                    {
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                            break;
+                    }
+                case "Field2":
+                    {
+                        if (acceptableCategories.Contains(value))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    }
+                case "Field3":
+                    {
+                        if (int.TryParse(value, out int num) && (num >= 0 && num <= 100))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        return false;
+                        break;
+                    }
+            }
+            return false;
+        }
+
+
+
         public static void SelectionMenu()
         {
             bool exitApplication = false;
@@ -159,7 +290,7 @@ namespace SQL_Server_Interactions_Demo
             while (!exitApplication)
             {
 
-                HashSet<string> allowedChoices = new HashSet<string> { "1", "2", "3", "4", "9" };
+                HashSet<string> allowedChoices = new HashSet<string> { "1", "2", "3", "4", "7", "8", "9" };
 
                 List<CustomClass> data = LoadDatabase();
 
@@ -188,10 +319,18 @@ namespace SQL_Server_Interactions_Demo
                         GenerateNewRow(data);
                         break;
                     case "3":
-                        Console.WriteLine("Option not currently in use...");
+                        ModifyDatabaseEntry(data);
                         break;
                     case "4":
                         RemoveFromDatabase(data);
+                        break;
+                    case "7":
+                        Console.WriteLine("Feature not implemented yet.\n");
+                        break;
+                    case "8":
+                        Console.Clear();
+                        GetTables();
+                        ContinuePrompt();
                         break;
                     case "9":
                         Console.Clear();
@@ -218,6 +357,8 @@ namespace SQL_Server_Interactions_Demo
             Console.WriteLine("2. Generate and add new entry (default data)");
             Console.WriteLine("3. Modify entry");
             Console.WriteLine("4. Remove entry");
+            Console.WriteLine("7. List server databases");
+            Console.WriteLine("8. List database tables");
             Console.WriteLine("9. Exit\n");
         }
 
