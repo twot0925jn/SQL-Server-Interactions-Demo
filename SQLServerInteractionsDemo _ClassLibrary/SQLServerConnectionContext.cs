@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using SQLServerInteractionsDemo__ClassLibrary;
 
 namespace SQLServerInteractionsDemo_ClassLibrary
 {
@@ -8,10 +10,10 @@ namespace SQLServerInteractionsDemo_ClassLibrary
     //The following is a context class
     public class SQLServerConnectionContext : DbContext
     {
-        public string dataSource = "(localdb)\\MSSQLLocalDB";       //Server name or network address of the SQL Server instance
-        public string initialCatalog = "ExampleDatabase";           //Database name
-        public string userID = "";                                  //Username for SQL Server authentication
-        public string userPass = "";                                //Password for SQL Server authentication
+        public string dataSource = Utilities.ConnectionString["DataSource"];                        //Server name or network address of the SQL Server instance
+        public string initialCatalog = Utilities.ConnectionString["InitialCatalogue"];              //Database name
+        public string userID = Utilities.ConnectionString["UserID"];                                //Username for SQL Server authentication
+        public string userPass = Utilities.ConnectionString["UserPass"];                            //Password for SQL Server authentication
 
         //DBSet represents a collection of entities that can be queried from the database
         //Ensure that the database name is set here to match your SQL Server database (dbo.ExampleTable in the example)

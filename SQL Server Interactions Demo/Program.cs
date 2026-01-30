@@ -1,10 +1,10 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using SQLServerInteractionsDemo_ClassLibrary;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using SQLServerInteractionsDemo__ClassLibrary;
+using SQLServerInteractionsDemo_ClassLibrary;
 using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Globalization;
 
 
@@ -13,9 +13,17 @@ namespace SQL_Server_Interactions_Demo
     internal class Program
     {
 
-        public static List<string> GetTables()
+        public static List<string> GetTables() //Retrieval and display of table names from the connected database, no specific function beyond that currently
         {
-            using (SqlConnection connection = new SqlConnection("Server=(localdb)\\MSSQLLocalDB;Database=ExampleDatabase;Trusted_Connection=True;Encrypt=False"))
+
+
+            using (SqlConnection connection = new SqlConnection
+                (
+                $"Server={Utilities.ConnectionString["DataSource"]};" +
+                $"Database={Utilities.ConnectionString["InitialCatalogue"]};" +
+                "Trusted_Connection=True;" +
+                "Encrypt=False")
+                )
             {
                 connection.Open();
                 DataTable schema = connection.GetSchema("Tables");
@@ -30,23 +38,7 @@ namespace SQL_Server_Interactions_Demo
             }
         }
 
-
-
-        //public static List<string> GetTables()
-        //{
-        //    using (SQLServerConnectionContext db = new SQLServerConnectionContext())
-        //    {
-        //        var tableNames = db.Model.GetEntityTypes()
-        //            .Select(t => t.GetTableName())
-        //            .Distinct()
-        //            .ToList();
-        //    }
-
-        //    return tableNames;
-        //}
-
-
-        public static List<CustomClass> LoadDatabase()
+        public static List<CustomClass> LoadDatabase() //Retrieval of entries from connected database
         {
             var databaseContents = new List<CustomClass>();
             using (SQLServerConnectionContext db = new SQLServerConnectionContext())
@@ -57,7 +49,7 @@ namespace SQL_Server_Interactions_Demo
             return databaseContents;
         }
 
-        public static void AddToDatabase(List<CustomClass> data)
+        public static void AddToDatabase(List<CustomClass> data) //Addition of new entry to connected database
         {
             using (SQLServerConnectionContext db = new SQLServerConnectionContext())
             {
@@ -68,7 +60,7 @@ namespace SQL_Server_Interactions_Demo
             Console.WriteLine("\nDatabase updated");
         }
 
-        public static void RemoveFromDatabase(List<CustomClass> data)
+        public static void RemoveFromDatabase(List<CustomClass> data) //Remocal of entry selection fro connected database
         {
             string removalCandidate = EntrySelection(data, "remove");
             
@@ -90,7 +82,7 @@ namespace SQL_Server_Interactions_Demo
             }       
         }
 
-        public static void ModifyDatabaseEntry(List<CustomClass> data)
+        public static void ModifyDatabaseEntry(List<CustomClass> data) //Modification of entry selection from connected database
         {
             string modificationCandidate = EntrySelection(data, "modify");
             if (modificationCandidate == "0")
@@ -103,10 +95,8 @@ namespace SQL_Server_Interactions_Demo
                 {
                     CustomClass databaseMatchedCandidate = db.ExampleTable.Single(a => a.Id.ToString() == modificationCandidate); //return the only entry in the database that matches the returned removalCandidate string 
                     databaseMatchedCandidate.Field1 = "Dolor";
-                    //databaseMatchedCandidate.Field2 = "Cat4";
                     databaseMatchedCandidate.Field3 = 3;
 
-                    //db.ExampleTable.Remove(databaseMatchedCandidate);
                     db.SaveChanges();
                 }
                 Console.WriteLine($"\nDatabase updated, entry ID {modificationCandidate} modified.");
@@ -114,7 +104,7 @@ namespace SQL_Server_Interactions_Demo
             }
         }
 
-        public static void DatabasePrintRows(List<CustomClass> data)
+        public static void DatabasePrintRows(List<CustomClass> data) //Retrieve and display all entries from connected database
         {
             LoadDatabase();
             //Console.WriteLine("Current Rows:\n");
@@ -124,21 +114,18 @@ namespace SQL_Server_Interactions_Demo
             }
         }
 
-        public static void GenerateNewRow(List<CustomClass> data)
+        public static void GenerateNewRow(List<CustomClass> data) //Generation and addition of new database row based on user selected category (otherwise default values)
         {
             string input = "";
-            HashSet<string> acceptableCategories = new HashSet<string> { "Cat1", "Cat2", "Cat3", "Cat4" };
-
             Console.Clear();
 
-            //validate input against acceptableCategories hashset
-            while (!acceptableCategories.Contains(input))
+            while (!Utilities.AcceptableCategories.Contains(input))
             {
-                Console.WriteLine($"Please select from the following: {string.Join(", ", acceptableCategories)}\n");
+                Console.WriteLine($"Please select from the following: {string.Join(", ", Utilities.AcceptableCategories)}\n");
 
                 input = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Console.ReadLine().Trim() ?? string.Empty); //Convert input to title case
                 
-                if (!acceptableCategories.Contains(input))
+                if (!Utilities.AcceptableCategories.Contains(input))
                 {
                     Console.Clear();
                     Console.WriteLine($"Selection \"{input}\" is invalid.\n");
@@ -177,7 +164,7 @@ namespace SQL_Server_Interactions_Demo
             ContinuePrompt();
         }
 
-        public static string EntrySelection(List<CustomClass> data, string mode)
+        public static string EntrySelection(List<CustomClass> data, string mode) //Selection of entry to modify/remove depending on given mode
         {
             Console.Clear();
             List<string> id = new List<string> ();
@@ -214,7 +201,7 @@ namespace SQL_Server_Interactions_Demo
             return selection;
         }
 
-        public static string GetAttributeInput(string field)
+        public static string GetAttributeInput(string field) //User promting for attribute retrieval (specifically for attribute modification)
         {
             Console.WriteLine($"Please enter a value for {field}: ");
 
@@ -230,10 +217,8 @@ namespace SQL_Server_Interactions_Demo
             }
         }
 
-        public static bool ValidateAttribute(string field, string value)
+        public static bool ValidateAttribute(string field, string value) //Validation of attribute given by user against allowed values/ranges (specifically for attribute modification)
         {
-
-            HashSet<string> acceptableCategories = new HashSet<string> { "Cat1", "Cat2", "Cat3", "Cat4" };
             switch (field)
             {
                 case "Field1":
@@ -250,7 +235,7 @@ namespace SQL_Server_Interactions_Demo
                     }
                 case "Field2":
                     {
-                        if (acceptableCategories.Contains(value))
+                        if (Utilities.AcceptableCategories.Contains(value))
                         {
                             return true;
                         }
@@ -281,26 +266,21 @@ namespace SQL_Server_Interactions_Demo
             return false;
         }
 
-
-
-        public static void SelectionMenu()
+        public static void SelectionMenu() //Main application menu loop
         {
             bool exitApplication = false;
 
             while (!exitApplication)
             {
-
-                HashSet<string> allowedChoices = new HashSet<string> { "1", "2", "3", "4", "7", "8", "9" };
-
                 List<CustomClass> data = LoadDatabase();
 
                 ListMenuOptions();
                 string choice = Console.ReadLine().Trim();
 
-                while (!allowedChoices.Contains(choice))
+                while (!Utilities.AllowedMenuChoices.Contains(choice))
                 {
                     Console.Clear();
-                    Console.WriteLine($"Invalid selection, only the following are allowed: {string.Join(", ", allowedChoices)}\n");
+                    Console.WriteLine($"Invalid selection, only the following are allowed: {string.Join(", ", Utilities.AllowedMenuChoices)}\n");
 
                     ListMenuOptions();
 
@@ -343,13 +323,13 @@ namespace SQL_Server_Interactions_Demo
             }
 
         }
-        public static void ContinuePrompt()
+        public static void ContinuePrompt() //Prompt to pause application until user is ready to continue
         {
             Console.WriteLine("\nPress enter to continue");
             Console.ReadLine();
         }
 
-        public static void ListMenuOptions()
+        public static void ListMenuOptions() //Display of main menu options
         {
             Console.Clear();
             Console.WriteLine("Choose an option:");
