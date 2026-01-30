@@ -107,7 +107,6 @@ namespace SQL_Server_Interactions_Demo
         public static void DatabasePrintRows(List<CustomClass> data) //Retrieve and display all entries from connected database
         {
             LoadDatabase();
-            //Console.WriteLine("Current Rows:\n");
             foreach (var item in data)
             {
                 Console.WriteLine($"ID: {item.Id}, Field1: {item.Field1}, Field2: {item.Field2}, Field3: {item.Field3}");
@@ -119,13 +118,13 @@ namespace SQL_Server_Interactions_Demo
             string input = "";
             Console.Clear();
 
-            while (!Utilities.AcceptableCategories.Contains(input))
+            while (!CustomClass.allowedCategories.Contains(input))
             {
-                Console.WriteLine($"Please select from the following: {string.Join(", ", Utilities.AcceptableCategories)}\n");
+                Console.WriteLine($"Please select from the following: {string.Join(", ", CustomClass.allowedCategories)}\n");
 
                 input = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Console.ReadLine().Trim() ?? string.Empty); //Convert input to title case
                 
-                if (!Utilities.AcceptableCategories.Contains(input))
+                if (!CustomClass.allowedCategories.Contains(input))
                 {
                     Console.Clear();
                     Console.WriteLine($"Selection \"{input}\" is invalid.\n");
@@ -235,7 +234,7 @@ namespace SQL_Server_Interactions_Demo
                     }
                 case "Field2":
                     {
-                        if (Utilities.AcceptableCategories.Contains(value))
+                        if (CustomClass.allowedCategories.Contains(value))
                         {
                             return true;
                         }
@@ -277,10 +276,10 @@ namespace SQL_Server_Interactions_Demo
                 ListMenuOptions();
                 string choice = Console.ReadLine().Trim();
 
-                while (!Utilities.AllowedMenuChoices.Contains(choice))
+                while (!CustomClass.allowedCategories.Contains(choice))
                 {
                     Console.Clear();
-                    Console.WriteLine($"Invalid selection, only the following are allowed: {string.Join(", ", Utilities.AllowedMenuChoices)}\n");
+                    Console.WriteLine($"Invalid selection, only the following are allowed: {string.Join(", ", CustomClass.allowedCategories)}\n");
 
                     ListMenuOptions();
 
